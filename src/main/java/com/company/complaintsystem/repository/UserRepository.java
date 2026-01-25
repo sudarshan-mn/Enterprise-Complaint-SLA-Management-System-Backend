@@ -1,0 +1,20 @@
+package com.company.complaintsystem.repository;
+
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.company.complaintsystem.entity.Role;
+import com.company.complaintsystem.entity.User;
+
+public interface UserRepository extends JpaRepository<User,Long>{
+	
+	Optional<User> findByEmail(String email);
+
+	boolean existsByEmail(String email);
+	
+	Optional<User> findFirstByRoleAndActiveTrue(Role role);
+	
+	
+	long countByRole(Role role);
+}
