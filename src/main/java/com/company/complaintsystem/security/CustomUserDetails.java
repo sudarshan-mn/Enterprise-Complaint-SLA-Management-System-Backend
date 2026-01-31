@@ -15,7 +15,6 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
-    // ✅ VERY IMPORTANT — USED IN ComplaintService
     public User getUser() {
         return this.user;
     }
@@ -50,7 +49,6 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-    // 🔒 Kept true intentionally (as decided earlier)
     @Override
     public boolean isEnabled() {
         return true;

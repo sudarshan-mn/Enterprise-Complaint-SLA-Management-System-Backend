@@ -42,13 +42,10 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth
-                // 🔥 VERY IMPORTANT FOR REACT LOGIN
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                // PUBLIC AUTH ROUTES
                 .requestMatchers("/api/auth/**").permitAll()
 
-                // EVERYTHING ELSE NEEDS JWT
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -56,7 +53,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ================== CORS CONFIG ==================
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -79,7 +75,6 @@ public class SecurityConfig {
         return source;
     }
 
-    // ================== AUTH PROVIDER ==================
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -88,7 +83,6 @@ public class SecurityConfig {
         return provider;
     }
 
-    // ================== AUTH MANAGER ==================
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {

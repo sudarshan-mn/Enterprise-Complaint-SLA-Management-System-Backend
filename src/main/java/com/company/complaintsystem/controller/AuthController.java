@@ -40,7 +40,6 @@ public class AuthController {
 
         var user = authService.findByEmail(request.getEmail());
 
-        // 🔥 GENERATE TOKEN WITH ROLE
         String token = jwtUtil.generateToken(
             user.getEmail(),
             user.getRole().name()
@@ -51,7 +50,6 @@ public class AuthController {
                 .build();
     }
 
-    // ============== CUSTOMER REGISTER ==============
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDto registerCustomer(

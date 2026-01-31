@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
         return mapToResponseDto(savedUser);
     }
 
-    // ✅ ADD THIS METHOD
     public List<UserResponseDto> getAllUsers() {
         return userRepository.findAll()
                 .stream()
@@ -48,7 +47,6 @@ public class UserServiceImpl implements UserService {
                 .toList();
     }
 
-    // ✅ COMMON MAPPER (BEST PRACTICE)
     private UserResponseDto mapToResponseDto(User user) {
         return UserResponseDto.builder()
                 .id(user.getId())

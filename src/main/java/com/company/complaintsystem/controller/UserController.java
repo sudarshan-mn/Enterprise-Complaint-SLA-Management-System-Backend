@@ -31,7 +31,6 @@ public class UserController {
 		return userServiceImpl.createUser(dto);
 	}
 
-    // ✅ GET ALL USERS (ADMIN)
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponseDto> getAllUsers() {
