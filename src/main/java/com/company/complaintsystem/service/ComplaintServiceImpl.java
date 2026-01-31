@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.company.complaintsystem.dto.AdminComplaintListDto;
 import com.company.complaintsystem.dto.AdminDashboardResponseDto;
 import com.company.complaintsystem.dto.AssignComplaintRequestDto;
 import com.company.complaintsystem.dto.ComplaintCreateRequestDto;
@@ -24,6 +25,7 @@ import com.company.complaintsystem.repository.ComplaintHistoryRepository;
 import com.company.complaintsystem.repository.ComplaintRepository;
 import com.company.complaintsystem.repository.UserRepository;
 import com.company.complaintsystem.security.CustomUserDetails;
+import com.company.complaintsystem.security.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -384,9 +386,43 @@ public class ComplaintServiceImpl implements ComplaintService {
     				.toList();
  	
     	}
+    	
+    	@Override
+    	public Page<AdminComplaintListDto> getAllComplaints(Pageable pageable) {
+
+    	    return complaintRepository.findAll(pageable)
+    	        .map(c -> AdminComplaintListDto.builder()
+    	            .id(c.getId())
+    	            .title(c.getTitle())
+    	            .status(c.getStatus())
+    	            .priority(c.getPriority())
+    	            .category(c.getCategory())
+    	            .createdAt(c.getCreatedAt())
+    	            .build());
+    	}
+
+    	@Override
+    	public List<ComplaintResponseDto> getAssignedComplaints() {
+
+    	    User engineer = getCurrentUser();
+
+    	    return complaintRepository
+    	            .findByAssignedTo(engineer)
+    	            .stream()
+    	            .map(c -> ComplaintResponseDto.builder()
+    	                    .id(c.getId())
+    	                    .title(c.getTitle())
+    	                    .description(c.getDescription())
+    	                    .status(c.getStatus())
+    	                    .priority(c.getPriority())
+    	                    .category(c.getCategory())
+    	                    .build())
+    	            .toList();
+    	}
 
 
- 
+    	
+
     // SLA CALCULATION (CORE)
   
     private LocalDateTime calculateSlaDeadline(

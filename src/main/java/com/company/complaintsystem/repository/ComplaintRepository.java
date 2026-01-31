@@ -28,5 +28,8 @@ public interface ComplaintRepository extends JpaRepository<Complaint,Long> {
 //	List<Complaint>findByCreatedByOrderByCreatedAtDesc(User user);
 	
 	Page<Complaint> findByCreatedByOrderByCreatedAtDesc(User user ,Pageable pageable );
+	
+	
+
 }
  

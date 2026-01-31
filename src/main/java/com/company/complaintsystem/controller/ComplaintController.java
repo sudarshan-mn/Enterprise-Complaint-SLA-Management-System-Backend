@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.PageRequest;
+
+import com.company.complaintsystem.dto.AdminComplaintListDto;
 import com.company.complaintsystem.dto.AssignComplaintRequestDto;
 import com.company.complaintsystem.dto.ComplaintCreateRequestDto;
 import com.company.complaintsystem.dto.ComplaintResponseDto;
@@ -97,4 +99,21 @@ public class ComplaintController {
 	public List<ComplaintTimelineDto> getComplaintTimeline(@PathVariable Long id){
 		return complaintService.getComplaintTimeline(id);
 	}
+	
+	@GetMapping("/all")
+	@PreAuthorize("hasRole('ADMIN')")
+	public Page<AdminComplaintListDto> getAllComplaints(
+	        @RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "10") int size) {
+
+	    Pageable pageable = PageRequest.of(page, size);
+	    return complaintService.getAllComplaints(pageable);
+	}
+
+	@GetMapping("/assigned")
+	@PreAuthorize("hasRole('ENGINEER')")
+	public List<ComplaintResponseDto> getAssignedComplaints() {
+	    return complaintService.getAssignedComplaints();
+	}
+
 }

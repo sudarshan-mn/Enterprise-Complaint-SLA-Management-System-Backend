@@ -1,7 +1,10 @@
 package com.company.complaintsystem.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -11,6 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.company.complaintsystem.security.CustomUserDetailsService;
 import com.company.complaintsystem.security.JwtAuthenticationFilter;
@@ -31,12 +37,18 @@ public class SecurityConfig {
 
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.disable())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth
+                // 🔥 VERY IMPORTANT FOR REACT LOGIN
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                // PUBLIC AUTH ROUTES
                 .requestMatchers("/api/auth/**").permitAll()
+
+                // EVERYTHING ELSE NEEDS JWT
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -44,6 +56,30 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // ================== CORS CONFIG ==================
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowedOrigins(List.of(
+            "http://localhost:5173",
+            "http://localhost:5174"
+        ));
+
+        config.setAllowedMethods(List.of(
+            "GET", "POST", "PUT", "DELETE", "OPTIONS"
+        ));
+
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
+    // ================== AUTH PROVIDER ==================
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -52,6 +88,7 @@ public class SecurityConfig {
         return provider;
     }
 
+    // ================== AUTH MANAGER ==================
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {

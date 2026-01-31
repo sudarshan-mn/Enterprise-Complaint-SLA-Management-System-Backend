@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.company.complaintsystem.dto.AdminComplaintListDto;
 import com.company.complaintsystem.dto.AdminDashboardResponseDto;
 import com.company.complaintsystem.dto.AssignComplaintRequestDto;
 import com.company.complaintsystem.dto.ComplaintCreateRequestDto;
@@ -14,6 +15,8 @@ import com.company.complaintsystem.dto.CustomerComplaintResponseDto;
 
 import com.company.complaintsystem.dto.MyComplaintListDto;
 import com.company.complaintsystem.dto.ReassignComplaintRequestDto;
+import com.company.complaintsystem.entity.Complaint;
+import com.company.complaintsystem.entity.ComplaintStatus;
 
 public interface ComplaintService {
 
@@ -41,4 +44,9 @@ public interface ComplaintService {
 	CustomerComplaintResponseDto getMyComplaintById(Long complaintId);
 	
 	List<ComplaintTimelineDto> getComplaintTimeline(Long complaintId);
+	
+	 Page<AdminComplaintListDto> getAllComplaints(Pageable pageable);
+	
+	 List<ComplaintResponseDto> getAssignedComplaints();
+
 }
