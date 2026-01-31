@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.company.complaintsystem.dto.UserRequestDto;
 import com.company.complaintsystem.dto.UserResponseDto;
+import com.company.complaintsystem.entity.Role;
 import com.company.complaintsystem.entity.User;
 import com.company.complaintsystem.exception.ResourceAlreadyExistsException;
 import com.company.complaintsystem.repository.UserRepository;
@@ -55,4 +56,18 @@ public class UserServiceImpl implements UserService {
                 .role(user.getRole())
                 .build();
     }
+    
+    public List<UserResponseDto> getEngineers() {
+        return userRepository.findByRole(Role.ENGINEER)
+                .stream()
+                .map(user -> UserResponseDto.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .email(user.getEmail())
+                        .role(user.getRole())
+                        .build())
+                .toList();
+    }
+
+
 }

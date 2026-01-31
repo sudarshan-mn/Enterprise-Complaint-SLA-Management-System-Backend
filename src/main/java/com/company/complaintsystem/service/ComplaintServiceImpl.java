@@ -300,6 +300,7 @@ public class ComplaintServiceImpl implements ComplaintService {
                         .id(c.getId())
                         .title(c.getTitle())
                         .status(c.getStatus())
+                        .priority(c.getPriority())
                         .build())
                 .toList();
     }
@@ -368,24 +369,32 @@ public class ComplaintServiceImpl implements ComplaintService {
     	}
 
     	@Override
-    	public List<ComplaintTimelineDto> getComplaintTimeline(Long complaintId){
-    		
-    		Complaint complaint=complaintRepository.findById(complaintId)
-    				.orElseThrow(()->new ResourceNotFoundException("Complaints not found"));
-    		
-    		return complaintHistoryRepository
-    				.findByComplaintOrderByChangedAtDesc(complaint)
-    				.stream()
-    				.map(h->ComplaintTimelineDto.builder()
-    						.oldStatus(h.getOldStatus())
-    						.newStatus(h.getNewStatus())
-    						.changedAt(h.getChangedAt())
-    						.changedByName(h.getChangedBy().getName())
-    						.changedByRole(h.getChangedBy().getRole())
-    						.build())
-    				.toList();
- 	
+    	public List<ComplaintTimelineDto> getComplaintTimeline(Long complaintId) {
+
+    	    Complaint complaint = complaintRepository.findById(complaintId)
+    	            .orElseThrow(() -> new ResourceNotFoundException("Complaint not found"));
+
+    	    return complaintHistoryRepository
+    	            .findByComplaintOrderByChangedAtDesc(complaint)
+    	            .stream()
+    	            .map(h -> ComplaintTimelineDto.builder()
+    	                    .oldStatus(h.getOldStatus())
+    	                    .newStatus(h.getNewStatus())
+    	                    .changedAt(h.getChangedAt())
+    	                    .changedByName(
+    	                            h.getChangedBy() != null
+    	                                    ? h.getChangedBy().getName()
+    	                                    : "SYSTEM"
+    	                    )
+    	                    .changedByRole(
+    	                            h.getChangedBy() != null
+    	                                    ? h.getChangedBy().getRole()
+    	                                    : null
+    	                    )
+    	                    .build())
+    	            .toList();
     	}
+
     	
     	@Override
     	public Page<AdminComplaintListDto> getAllComplaints(Pageable pageable) {
@@ -421,7 +430,20 @@ public class ComplaintServiceImpl implements ComplaintService {
     	}
 
 
-    	
+    	@Override
+    	public List<ComplaintResponseDto> getResolvedComplaints() {
+    	    return complaintRepository
+    	            .findByStatus(ComplaintStatus.RESOLVED)
+    	            .stream()
+    	            .map(c -> ComplaintResponseDto.builder()
+    	                    .id(c.getId())
+    	                    .title(c.getTitle())
+    	                    .status(c.getStatus())
+    	                    .priority(c.getPriority())
+    	                    .build())
+    	            .toList();
+    	}
+
 
     // SLA CALCULATION (CORE)
   

@@ -29,6 +29,8 @@ public interface ComplaintRepository extends JpaRepository<Complaint,Long> {
 	
 	Page<Complaint> findByCreatedByOrderByCreatedAtDesc(User user ,Pageable pageable );
 	
+	List<Complaint> findByStatus(ComplaintStatus status);
+
 	
 
 }

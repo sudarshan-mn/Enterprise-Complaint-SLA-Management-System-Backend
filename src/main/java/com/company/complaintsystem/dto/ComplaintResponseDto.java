@@ -19,4 +19,5 @@ public class ComplaintResponseDto {
     private Priority priority;
     
     private ComplaintCategory category;
+    
 }

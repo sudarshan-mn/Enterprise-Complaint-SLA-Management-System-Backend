@@ -101,7 +101,7 @@ public class ComplaintController {
 	}
 	
 	@GetMapping("/all")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN','LEAD','MANAGER')")
 	public Page<AdminComplaintListDto> getAllComplaints(
 	        @RequestParam(defaultValue = "0") int page,
 	        @RequestParam(defaultValue = "10") int size) {

@@ -32,8 +32,15 @@ public class UserController {
 	}
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','LEAD')")
     public List<UserResponseDto> getAllUsers() {
         return userServiceImpl.getAllUsers();
     }
+    
+    @GetMapping("/engineers")
+    @PreAuthorize("hasRole('LEAD')")
+    public List<UserResponseDto> getEngineers() {
+        return userServiceImpl.getEngineers();
+    }
+
 }

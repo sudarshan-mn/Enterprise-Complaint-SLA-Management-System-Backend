@@ -48,5 +48,6 @@ public interface ComplaintService {
 	 Page<AdminComplaintListDto> getAllComplaints(Pageable pageable);
 	
 	 List<ComplaintResponseDto> getAssignedComplaints();
+	 List<ComplaintResponseDto> getResolvedComplaints();
 
 }

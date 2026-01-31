@@ -34,4 +34,11 @@ public class ManagerController {
 	public ComplaintResponseDto closeComplaints(@PathVariable Long id) {
 		return complaintService.closeComplaints(id);
 	}
+	@GetMapping("/resolved")
+	@PreAuthorize("hasRole('MANAGER')")
+	public List<ComplaintResponseDto> getResolvedComplaints() {
+	    return complaintService.getResolvedComplaints();
+	}
+
+	
 }
