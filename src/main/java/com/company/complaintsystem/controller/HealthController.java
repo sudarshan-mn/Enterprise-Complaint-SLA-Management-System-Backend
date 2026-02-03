@@ -10,4 +10,8 @@ public class HealthController {
     public String health() {
         return "OK";
     }
+        @GetMapping("/")
+    public String home() {
+        return "Complaint & SLA Management System API is running.";
+    }
 }
