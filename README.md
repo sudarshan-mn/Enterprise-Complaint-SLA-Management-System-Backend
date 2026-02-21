@@ -1,92 +1,92 @@
 Complaint & SLA Management System – Backend
 
-live demo :https://complaint-sla-management.netlify.app/login
+This is a backend-focused complaint management system built using Spring Boot.
 
-This is a role-based complaint management backend built using Spring Boot.
-The goal of this project is to simulate how real companies (telecom, banking, e-commerce, support platforms) handle customer complaints with SLA rules, escalation, reassignment, and tracking.
+The idea behind this project was to simulate how real-world platforms (telecom, banking, e-commerce support systems) handle customer complaints with proper workflows, role-based access, and SLA tracking.
 
-I built this project step by step with real backend workflows in mind, not just CRUD APIs.
+🌐 Live Demo:
+https://complaint-sla-management.netlify.app/login
 
-What this project does (in simple words)
+Note: This project mainly focuses on backend architecture and business logic. The frontend is only for demonstration.
 
-Customers can raise complaints
+What this project does
+
+In simple terms, this system allows different roles to manage complaints end-to-end.
+
+Customers can raise complaints and track their status
 
 Admin assigns complaints to engineers
 
-Engineers work on and resolve complaints
+Engineers work on and resolve them
 
-Leads can reassign or escalate complaints
+Leads can reassign or escalate issues
 
 Managers monitor SLA breaches and close complaints
 
-Every important action is recorded as history
-
-SLA deadlines are calculated and monitored automatically
-
-This is how real support systems work.
+Every important action is recorded for traceability.
 
 Roles in the system
-Role	What they can do
-CUSTOMER	Raise complaints, view own complaints and status
-ADMIN	Assign complaints, view dashboard
-ENGINEER	Start work, resolve assigned complaints
-LEAD	Reassign complaints, escalate priority
-MANAGER	View SLA breaches, close resolved complaints
 
 Each role has strict access control using Spring Security.
 
-Complaint flow (lifecycle)
+CUSTOMER – Raise and track complaints
+
+ADMIN – Assign complaints and monitor dashboards
+
+ENGINEER – Work on assigned complaints
+
+LEAD – Reassign or escalate complaints
+
+MANAGER – Monitor SLA breaches and close issues
+
+Complaint lifecycle
+
+The complaint flow follows a controlled lifecycle:
+
 NEW → ASSIGNED → IN_PROGRESS → RESOLVED → CLOSED
 
-
 Only valid transitions are allowed.
-Invalid operations (like resolving without starting work) are blocked.
+For example, a complaint cannot be resolved before work has started.
 
-SLA handling (important part)
+SLA handling
 
-SLA deadlines are not sent from frontend.
-They are calculated on the server based on priority.
+One of the key parts of this project is SLA management.
 
-Priority	SLA
-LOW	72 hours
-MEDIUM	48 hours
-HIGH	24 hours
+SLA deadlines are calculated on the server side based on priority:
 
-SLA is set when the complaint is created
+LOW → 72 hours
 
-A scheduler checks for SLA breaches
+MEDIUM → 48 hours
 
-If SLA is breached:
+HIGH → 24 hours
 
-slaBreached = true
+A scheduler periodically checks for SLA breaches.
+If a complaint crosses the deadline:
 
-Priority is automatically escalated
+It is marked as SLA breached
 
-This avoids client manipulation and keeps logic centralized.
+Priority can be escalated automatically
 
-Complaint History (Audit trail)
+This keeps all business logic centralized and secure.
 
-Every major action is saved:
+Complaint history (audit trail)
+
+Every major action is stored as history:
 
 Complaint creation
 
 Assignment
 
-Status changes
+Status updates
 
-Reassignment
+Escalations
 
-Escalation
+Resolution and closure
 
-Resolution
-
-Closure
-
-History is stored in a separate table and exposed through a read-only timeline API for internal roles.
-
-This makes the system traceable and audit-friendly.
+This makes the system audit-friendly and traceable.
 
 Tech stack
+
 Backend
 
 Java 17
@@ -99,32 +99,21 @@ Spring Data JPA (Hibernate)
 
 MySQL
 
-Lombok
-
 Architecture
 
-REST APIs
+The project follows a layered architecture:
 
-DTO-based request/response
+Controller → Service → Repository
 
-Layered architecture (Controller → Service → Repository)
+Other highlights:
 
-Project structure
-src/main/java/com/company/complaintsystem
-│
-├── controller
-├── service
-├── repository
-├── entity
-├── dto
-├── security
-├── config
-├── exception
-├── scheduler
+DTO-based request/response models
 
+Centralized exception handling
 
+Modular package structure
 
-Clean separation of responsibilities.
+Scheduler for SLA monitoring
 
 Security
 
@@ -132,51 +121,17 @@ JWT-based authentication
 
 Stateless session management
 
-Role-based authorization using @PreAuthorize
+Role-based authorization
 
-Passwords stored using PasswordEncoder
+Password encryption using PasswordEncoder
 
-Endpoints protected per role
+Endpoint-level protection
 
-Admin dashboard
+Why I built this
 
-Admin can see:
+This project was built to practice real backend concepts beyond basic CRUD APIs, including:
 
-Total complaints
-
-Complaints by status
-
-SLA breached complaints
-
-Number of engineers, leads, and managers
-
-This helps in operational monitoring.
-
-Customer features
-
-View own complaints with pagination
-
-View complaint details (status, priority, category, created time)
-
-Track complaint progress
-
-Customers cannot see other users’ complaints.
-
-Scheduler
-
-Periodically checks for SLA breaches
-
-Automatically escalates priority when SLA is missed
-
-Marks complaints as SLA breached
-
-Why this project matters (interview point)
-
-This project shows:
-
-Real business logic
-
-Multi-role workflow
+Multi-role workflows
 
 SLA enforcement
 
@@ -184,9 +139,10 @@ Audit logging
 
 Secure backend design
 
+The goal was to build something closer to real production systems.
 
+Author
 
-
-Sudarshan Gowda
+Sudarshan M N
 Java Full Stack Developer
-Focused on building clean, real-world backend systems
+Focused on building clean, real-world backend systems.
